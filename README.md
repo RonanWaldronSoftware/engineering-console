@@ -12,6 +12,8 @@ Its main purpose is to keep the information and tools needed to work with those 
 
 The package contains the existing engineering applications.
 
+![Engineering Console](images/github-pelconsole-gui1.png)
+
 ## Main functions
 
 | Function | What it does |
