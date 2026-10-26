@@ -1,0 +1,73 @@
+<html>
+<head>
+<title>PEL Engineering Console</title>
+<HTA:APPLICATION
+  APPLICATIONNAME="PEL Engineering Console"
+  ID="PELConsole"
+  BORDER="thin"
+  CAPTION="yes"
+  MAXIMIZEBUTTON="yes"
+  MINIMIZEBUTTON="yes"
+  SCROLL="no"
+  SINGLEINSTANCE="yes"
+  SYSMENU="yes"
+  WINDOWSTATE="normal"
+/>
+<meta http-equiv="x-ua-compatible" content="IE=9" />
+<style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#0b1020;color:#f5f7fb;font-family:Segoe UI,Arial,sans-serif}
+*{box-sizing:border-box}.app{height:100%;display:flex;flex-direction:column}.top{height:78px;display:flex;align-items:center;padding:0 28px;border-bottom:1px solid #202c43;background:#0b1020}.brand{font-size:26px;font-weight:700;letter-spacing:-1px}.sub{margin-left:10px;color:#94a1b8;font-size:11px;letter-spacing:1.7px}.path{margin-left:auto;background:#121a2b;border:1px solid #26334d;border-radius:999px;padding:9px 14px;font-size:11px;color:#97a4b9}.dot{color:#42d3a2;margin-right:7px}.shell{flex:1;display:flex;min-height:0}.side{width:224px;background:#0d1424;border-right:1px solid #202c43;padding:24px 12px}.sidecap{color:#68758d;font-size:10px;font-weight:700;letter-spacing:1.4px;margin:4px 12px 12px}.nav{padding:12px 14px;border-radius:9px;margin:4px 0;color:#a0aec2;font-weight:600;font-size:13px;cursor:pointer}.nav:hover,.nav.active{background:#172138;color:#fff}.main{flex:1;padding:28px 32px;overflow:auto}.hero{font-size:31px;font-weight:700;letter-spacing:-.7px;margin:0 0 6px}.lead{color:#94a1b8;margin:0 0 24px;font-size:13px}.cards{display:flex;gap:14px;margin-bottom:22px}.card{flex:1;background:#121a2b;border:1px solid #26334d;border-radius:14px;padding:18px 20px;min-height:104px}.cap{color:#8190a7;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase}.num{font-size:31px;font-weight:700;margin:5px 0 2px}.muted{color:#8e9bb0;font-size:12px}.grid{display:flex;gap:16px;align-items:stretch}.panel{background:#121a2b;border:1px solid #26334d;border-radius:14px;padding:22px;flex:1}.panel.narrow{flex:0 0 350px}.ptitle{font-size:17px;font-weight:700;margin-bottom:5px}.pdesc{color:#8f9cb1;font-size:12px;margin-bottom:18px}.launch{background:#172138;border:1px solid #2b3853;border-radius:12px;padding:16px;margin:10px 0;display:flex;align-items:center}.vbadge{width:62px;height:42px;border-radius:9px;background:#22304c;display:flex;align-items:center;justify-content:center;font-weight:700;margin-right:14px}.ldesc{flex:1}.lname{font-weight:700;font-size:14px}.lpath{color:#77869d;font-size:10px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:470px}.btn{border:0;border-radius:8px;padding:10px 15px;font-weight:700;cursor:pointer;background:#6c8cff;color:#fff;font-family:Segoe UI}.btn:hover{background:#7a98ff}.btn.secondary{background:#22304c}.btn.secondary:hover{background:#2c3c5c}.status{display:flex;align-items:flex-start;padding:10px 0;border-bottom:1px solid #202c43}.status:last-child{border:0}.sicon{width:23px;font-size:15px}.ok{color:#42d3a2}.warn{color:#ffcc66}.bad{color:#ff6b7a}.stxt{font-size:12px;line-height:1.45}.footer{margin-top:16px;color:#647187;font-size:10px}.notice{background:#172138;border:1px solid #34425e;border-left:4px solid #ffcc66;border-radius:10px;padding:12px 14px;margin-bottom:18px;color:#c6cfdd;font-size:12px;line-height:1.5}.hidden{display:none}.list{width:100%;border-collapse:collapse}.list th{text-align:left;color:#7f8da4;font-size:10px;text-transform:uppercase;letter-spacing:.7px;padding:10px;border-bottom:1px solid #2a3750}.list td{padding:10px;border-bottom:1px solid #202c43;font-size:12px}.pill{display:inline-block;padding:4px 8px;border-radius:999px;background:#1e2b43;color:#b5c3d9;font-size:10px}
+</style>
+<script language="javascript">
+var shell, fso, root;
+function init(){
+  shell=new ActiveXObject('WScript.Shell'); fso=new ActiveXObject('Scripting.FileSystemObject');
+  var here=location.pathname.replace(/^\//,'').replace(/\//g,'\\'); here=unescape(here); var consoleDir=fso.GetParentFolderName(here); root=fso.GetParentFolderName(consoleDir);
+  document.getElementById('rootPath').innerText=root;
+  refresh(); show('overview');
+}
+function exists(p){try{return fso.FileExists(p)||fso.FolderExists(p)}catch(e){return false}}
+function countFolders(p){try{var e=new Enumerator(fso.GetFolder(p).SubFolders),n=0;for(;!e.atEnd();e.moveNext())n++;return n}catch(e){return 0}}
+function countFilesRecursive(p,exts){var n=0;try{var folder=fso.GetFolder(p),e=new Enumerator(folder.Files);for(;!e.atEnd();e.moveNext()){var x=(''+e.item().Name).toLowerCase();for(var i=0;i<exts.length;i++)if(x.slice(-exts[i].length)==exts[i]){n++;break}}var s=new Enumerator(folder.SubFolders);for(;!s.atEnd();s.moveNext())n+=countFilesRecursive(s.item().Path,exts)}catch(e){}return n}
+function refresh(){
+ document.getElementById('units').innerText=countFolders(root+'\\UNITS');
+ document.getElementById('groups').innerText=countFilesRecursive(root+'\\GROUPS',['.grp']);
+ document.getElementById('audio').innerText=countFilesRecursive(root+'\\AUDIO_FILES',['.wav','.mp3']);
+ var fw=exists(root+'\\FIRMWARE_IMAGESDean')?root+'\\FIRMWARE_IMAGESDean':root+'\\FIRMWARE_IMAGES';
+ document.getElementById('firmware').innerText=countFilesRecursive(fw,['.bin']);
+ var canonical=(''+root).toLowerCase()=='c:\\pel_engineering_ui';
+ setStatus('installStatus',canonical?'ok':'warn',canonical?'Installed at canonical C:\\PEL_ENGINEERING_UI path.':'Legacy apps contain C:\\PEL_ENGINEERING_UI references. Recommended location: C:\\PEL_ENGINEERING_UI.');
+ setStatus('v07Status',exists(root+'\\V0.7.1__20241001_100300__FW162___PCB201.exe')?'ok':'bad',exists(root+'\\V0.7.1__20241001_100300__FW162___PCB201.exe')?'v0.7 executable found.':'v0.7 executable missing.');
+ setStatus('v11Status',exists(root+'\\V0.11.1__20250416_111051__FW162___PCB201\\V0.11.1__20250416_111051__FW162___PCB201.exe')?'ok':'bad',exists(root+'\\V0.11.1__20250416_111051__FW162___PCB201\\V0.11.1__20250416_111051__FW162___PCB201.exe')?'v0.11 executable found.':'v0.11 executable missing.');
+ setStatus('dllStatus',exists(root+'\\PEL_CONSOLE\\backups\\v0.11_ftd2xx_32bit_original.dll')?'ok':'warn',exists(root+'\\PEL_CONSOLE\\backups\\v0.11_ftd2xx_32bit_original.dll')?'x64 FTDI app DLL installed; original x86 copies backed up.':'FTDI backup marker not found.');
+}
+function setStatus(id,kind,text){var el=document.getElementById(id);el.className='status '+kind;el.innerHTML='<div class="sicon">'+(kind=='ok'?'&#10003;':kind=='bad'?'&#10005;':'!')+'</div><div class="stxt">'+text+'</div>'}
+function run(path){try{if(!fso.FileExists(path)){alert('File not found:\n'+path);return}shell.Run('"'+path+'"',1,false)}catch(e){alert('Could not launch:\n'+e.message)}}
+function run07(){run(root+'\\main\\main\\main.exe')}
+function run07Folder(){run(root+'\\main\\main\\main.exe')}
+function run11(){run(root+'\\V0.11.1__20250416_111051__FW162___PCB201\\V0.11.1__20250416_111051__FW162___PCB201.exe')}
+function openFolder(p){try{shell.Run('explorer.exe "'+p+'"',1,false)}catch(e){alert(e.message)}}
+function show(name){var ids=['overview','versions','assets','help'];for(var i=0;i<ids.length;i++)document.getElementById(ids[i]).className=(ids[i]==name?'':'hidden');var n=document.getElementsByClassName('nav');for(var j=0;j<n.length;j++)n[j].className='nav';document.getElementById('nav_'+name).className='nav active'}
+</script>
+</head>
+<body onload="init()">
+<div class="app">
+ <div class="top"><div class="brand">PEL</div><div class="sub">ENGINEERING CONSOLE</div><div class="path"><span class="dot">●</span><span id="rootPath">Locating installation…</span></div></div>
+ <div class="shell">
+  <div class="side"><div class="sidecap">WORKSPACE</div><div id="nav_overview" class="nav" onclick="show('overview')">Overview</div><div id="nav_versions" class="nav" onclick="show('versions')">Application versions</div><div id="nav_assets" class="nav" onclick="show('assets')">Engineering data</div><div id="nav_help" class="nav" onclick="show('help')">Setup &amp; help</div></div>
+  <div class="main">
+   <div id="overview">
+    <div class="hero">PEL Engineering Workspace</div><div class="lead">Entry point for the existing v0.7 and v0.11 engineering tools.</div>
+    <div class="cards"><div class="card"><div class="cap">Units</div><div class="num" id="units">—</div><div class="muted">device workspaces</div></div><div class="card"><div class="cap">Groups</div><div class="num" id="groups">—</div><div class="muted">deployment groups</div></div><div class="card"><div class="cap">Audio</div><div class="num" id="audio">—</div><div class="muted">audio assets</div></div><div class="card"><div class="cap">Firmware</div><div class="num" id="firmware">—</div><div class="muted">binary images</div></div></div>
+    <div class="grid"><div class="panel"><div class="ptitle">Quick launch</div><div class="pdesc">Both generations are intentionally retained. Choose the version required for the job.</div>
+      <div class="launch"><div class="vbadge">v0.7</div><div class="ldesc"><div class="lname">PEL Engineering UI v0.7.1</div><div class="lpath">main\main\main.exe — corrected x64 FTDI app DLL</div></div><button class="btn" onclick="run07()">Launch</button></div>
+      <div class="launch"><div class="vbadge">v0.11</div><div class="ldesc"><div class="lname">PEL Engineering UI v0.11.1</div><div class="lpath">V0.11.1__20250416_111051__FW162___PCB201</div></div><button class="btn" onclick="run11()">Launch</button></div>
+    </div><div class="panel narrow"><div class="ptitle">Runtime health</div><div class="pdesc">Fast checks before opening an engineering session.</div><div id="installStatus"></div><div id="v07Status"></div><div id="v11Status"></div><div id="dllStatus"></div><div class="footer">No cloud connection. This console operates on the local installation only.</div></div></div>
+   </div>
+   <div id="versions" class="hidden"><div class="hero">Application versions</div><div class="lead">Launch either supported generation without changing the underlying workflows.</div><div class="panel"><div class="launch"><div class="vbadge">v0.7</div><div class="ldesc"><div class="lname">Onedir v0.7.1 build</div><div class="lpath">main\main\main.exe — app-local x64 FTDI DLL installed.</div></div><button class="btn" onclick="run07()">Launch</button></div><div class="launch"><div class="vbadge">v0.7</div><div class="ldesc"><div class="lname">Original standalone v0.7.1 build</div><div class="lpath">Retained unchanged as a fallback/reference build.</div></div><button class="btn secondary" onclick="run(root+'\\V0.7.1__20241001_100300__FW162___PCB201.exe')">Launch original</button></div><div class="launch"><div class="vbadge">v0.11</div><div class="ldesc"><div class="lname">Version 0.11.1</div><div class="lpath">Onedir build with its full runtime retained.</div></div><button class="btn" onclick="run11()">Launch</button></div></div></div>
+   <div id="assets" class="hidden"><div class="hero">Engineering data</div><div class="lead">Open existing data stores.</div><div class="grid"><div class="panel"><div class="ptitle">Device &amp; deployment data</div><div class="pdesc">Access data below.</div><table class="list"><tr><th>Area</th><th>Location</th><th></th></tr><tr><td>Units</td><td><span class="pill">UNITS</span></td><td><button class="btn secondary" onclick="openFolder(root+'\\UNITS')">Open</button></td></tr><tr><td>Groups</td><td><span class="pill">GROUPS</span></td><td><button class="btn secondary" onclick="openFolder(root+'\\GROUPS')">Open</button></td></tr><tr><td>Audio</td><td><span class="pill">AUDIO_FILES</span></td><td><button class="btn secondary" onclick="openFolder(root+'\\AUDIO_FILES')">Open</button></td></tr><tr><td>Firmware</td><td><span class="pill">FIRMWARE_IMAGESDean / FIRMWARE_IMAGES</span></td><td><button class="btn secondary" onclick="openFolder(exists(root+'\\FIRMWARE_IMAGESDean')?root+'\\FIRMWARE_IMAGESDean':root+'\\FIRMWARE_IMAGES')">Open</button></td></tr></table></div></div></div>
+   <div id="help" class="hidden"><div class="hero">Setup &amp; help</div><div class="lead">This bundle is designed to be self-contained on Windows.</div><div class="notice"><b>Recommended extraction:</b> extract the ZIP so this folder becomes <b>C:\PEL_ENGINEERING_UI</b>. The legacy apps contain references to that exact path. The console itself is location-aware, but the legacy binaries are not fully portable.</div><div class="panel"><div class="ptitle">What is included</div><div class="pdesc">No Python installation is required for this HTML Application console.</div><div class="status ok"><div class="sicon">✓</div><div class="stxt">Original v0.7 and v0.11 application binaries and runtime folders.</div></div><div class="status ok"><div class="sicon">✓</div><div class="stxt">Original UNITS, GROUPS, audio, firmware, drivers and support files.</div></div><div class="status ok"><div class="sicon">✓</div><div class="stxt">Correct x64 FTDI application DLL copied beside the 64-bit onedir executables.</div></div><div class="status ok"><div class="sicon">✓</div><div class="stxt">Original 32-bit FTDI DLLs preserved under PEL_CONSOLE\backups for rollback.</div></div><div class="status warn"><div class="sicon">!</div><div class="stxt">Windows FTDI device drivers still need to be installed normally if the PC does not already have them. The driver package is included.</div></div></div></div>
+  </div>
+ </div>
+</div>
+</body></html>
