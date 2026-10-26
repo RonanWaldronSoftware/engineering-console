@@ -13,7 +13,7 @@ Its main purpose is to keep the information and tools needed to work with those 
 The package contains the existing engineering applications.
 
 <p align="center">
-  <img src="images/github-pelconsole-gui1.png"
+  <img src="images/github-pelconsole-image1.png"
        alt="Engineering Console"
        width="750">
 </p>
