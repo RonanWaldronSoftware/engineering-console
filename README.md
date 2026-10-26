@@ -12,13 +12,40 @@ Its main purpose is to keep the information and tools needed to work with those 
 
 The package contains the existing engineering applications.
 
-![Engineering Console](images/github-pelconsole-gui1.png)
-
 <p align="center">
   <img src="images/github-pelconsole-gui1.png"
-       alt="PEL Engineering Console"
+       alt="Engineering Console"
        width="750">
 </p>
+
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="images/github-pelconsole-gui1.png" width="100%" alt="Dashboard">
+      <br>
+      <b>Engineering Console</b>
+    </td>
+    <td align="center" width="50%">
+      <img src="images/github-pelconsole-gui2.png" width="100%" alt="Unit Management">
+      <br>
+      <b>Tabs</b>
+    </td>
+  </tr>
+</table>
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="images/github-pelconsole-gui3.png" width="100%" alt="Dashboard">
+      <br>
+      <b>More Tabs</b>
+    </td>
+    <td align="center" width="50%">
+      <img src="images/github-pelconsole-gui4.png" width="100%" alt="Unit Management">
+      <br>
+      <b>More Tabs</b>
+    </td>
+  </tr>
+</table>
 
 ## Main functions
 
