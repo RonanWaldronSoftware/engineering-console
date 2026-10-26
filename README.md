@@ -14,6 +14,12 @@ The package contains the existing engineering applications.
 
 ![Engineering Console](images/github-pelconsole-gui1.png)
 
+<p align="center">
+  <img src="images/github-pelconsole-gui1.png"
+       alt="PEL Engineering Console"
+       width="750">
+</p>
+
 ## Main functions
 
 | Function | What it does |
